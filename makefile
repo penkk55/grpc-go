@@ -14,6 +14,9 @@ update-modules:
 	go get -u $(GRPC_MODULE)
 	go get -u $(PROTOBUF_MODULE)
 
+proto-gen:
+	protoc --go_out=. --go-grpc_out=. bacon.proto
+
 dev: 
 	go run main.go
 

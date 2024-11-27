@@ -2,17 +2,34 @@ syntax = "proto3";
 
 package bacon;
 
-option go_package = "/generated;bacon";
+option go_package = "./generated;bacon";
 
+// Existing BaconService
 service BaconService {
   rpc GetBacon (BaconRequest) returns (BaconResponse);
 }
 
+// New BeefSummaryService
+service BeefSummaryService {
+  rpc GetBeefSummary (Empty) returns (BeefSummaryResponse);
+}
+
+// Request message for BaconService
 message BaconRequest {
   string type = 1;
   int32 paras = 2;
 }
 
+// Response message for BaconService
 message BaconResponse {
   string text = 1;
+}
+
+// Empty message for requesting BeefSummary (no parameters)
+message Empty {}
+
+// Response message for BeefSummaryService
+message BeefSummaryResponse {
+  // Map of meat names to counts (e.g., "Bacon": 3, "Pastrami": 2)
+  map<string, int32> beef = 1;
 }

@@ -25,6 +25,8 @@ const (
 // BaconServiceClient is the client API for BaconService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Existing BaconService
 type BaconServiceClient interface {
 	GetBacon(ctx context.Context, in *BaconRequest, opts ...grpc.CallOption) (*BaconResponse, error)
 }
@@ -50,6 +52,8 @@ func (c *baconServiceClient) GetBacon(ctx context.Context, in *BaconRequest, opt
 // BaconServiceServer is the server API for BaconService service.
 // All implementations must embed UnimplementedBaconServiceServer
 // for forward compatibility.
+//
+// Existing BaconService
 type BaconServiceServer interface {
 	GetBacon(context.Context, *BaconRequest) (*BaconResponse, error)
 	mustEmbedUnimplementedBaconServiceServer()
@@ -114,6 +118,112 @@ var BaconService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBacon",
 			Handler:    _BaconService_GetBacon_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "bacon.proto",
+}
+
+const (
+	BeefSummaryService_GetBeefSummary_FullMethodName = "/bacon.BeefSummaryService/GetBeefSummary"
+)
+
+// BeefSummaryServiceClient is the client API for BeefSummaryService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// New BeefSummaryService
+type BeefSummaryServiceClient interface {
+	GetBeefSummary(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BeefSummaryResponse, error)
+}
+
+type beefSummaryServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewBeefSummaryServiceClient(cc grpc.ClientConnInterface) BeefSummaryServiceClient {
+	return &beefSummaryServiceClient{cc}
+}
+
+func (c *beefSummaryServiceClient) GetBeefSummary(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BeefSummaryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BeefSummaryResponse)
+	err := c.cc.Invoke(ctx, BeefSummaryService_GetBeefSummary_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BeefSummaryServiceServer is the server API for BeefSummaryService service.
+// All implementations must embed UnimplementedBeefSummaryServiceServer
+// for forward compatibility.
+//
+// New BeefSummaryService
+type BeefSummaryServiceServer interface {
+	GetBeefSummary(context.Context, *Empty) (*BeefSummaryResponse, error)
+	mustEmbedUnimplementedBeefSummaryServiceServer()
+}
+
+// UnimplementedBeefSummaryServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedBeefSummaryServiceServer struct{}
+
+func (UnimplementedBeefSummaryServiceServer) GetBeefSummary(context.Context, *Empty) (*BeefSummaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBeefSummary not implemented")
+}
+func (UnimplementedBeefSummaryServiceServer) mustEmbedUnimplementedBeefSummaryServiceServer() {}
+func (UnimplementedBeefSummaryServiceServer) testEmbeddedByValue()                            {}
+
+// UnsafeBeefSummaryServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BeefSummaryServiceServer will
+// result in compilation errors.
+type UnsafeBeefSummaryServiceServer interface {
+	mustEmbedUnimplementedBeefSummaryServiceServer()
+}
+
+func RegisterBeefSummaryServiceServer(s grpc.ServiceRegistrar, srv BeefSummaryServiceServer) {
+	// If the following call pancis, it indicates UnimplementedBeefSummaryServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&BeefSummaryService_ServiceDesc, srv)
+}
+
+func _BeefSummaryService_GetBeefSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BeefSummaryServiceServer).GetBeefSummary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BeefSummaryService_GetBeefSummary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BeefSummaryServiceServer).GetBeefSummary(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// BeefSummaryService_ServiceDesc is the grpc.ServiceDesc for BeefSummaryService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var BeefSummaryService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "bacon.BeefSummaryService",
+	HandlerType: (*BeefSummaryServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetBeefSummary",
+			Handler:    _BeefSummaryService_GetBeefSummary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
