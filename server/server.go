@@ -7,10 +7,9 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"regexp"
-	"strings"
 
 	pb "github.com/penkk55/grpc-go/generated"
+	helper "github.com/penkk55/grpc-go/helper"
 	"google.golang.org/grpc"
 )
 
@@ -45,17 +44,6 @@ func (s *BaconServer) GetBacon(ctx context.Context, req *pb.BaconRequest) (*pb.B
 	return &pb.BaconResponse{Text: string(body)}, nil
 }
 
-// Clean and count meats in the meat string
-func CleanMeats(input string) []string {
-	// Remove unwanted characters (., .., spaces)
-	reg := regexp.MustCompile(`[^a-zA-Z0-9\s-]`) //[^\w\s]
-	cleaned := reg.ReplaceAllString(input, "")
-
-	// Split the string by spaces to get individual meat names
-	meats := strings.Fields(cleaned)
-	return meats
-}
-
 // Implement GetBeefSummary RPC
 func (s *BaconServer) GetBeefSummary(ctx context.Context, req *pb.Empty) (*pb.BeefSummaryResponse, error) {
 
@@ -82,7 +70,8 @@ func (s *BaconServer) GetBeefSummary(ctx context.Context, req *pb.Empty) (*pb.Be
 
 	fmt.Println("ffffff")
 	// Clean and process the meat names
-	meats := CleanMeats(meatData)
+
+	meats := helper.CleanMeats(meatData)
 
 	// Count occurrences of each meat
 	meatCount := make(map[string]int32)

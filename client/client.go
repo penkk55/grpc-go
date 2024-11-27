@@ -4,11 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"regexp"
-	"strings"
 	"time"
 
 	pb "github.com/penkk55/grpc-go/generated"
@@ -20,48 +17,48 @@ type BaconServer struct {
 	pb.UnimplementedBeefSummaryServiceServer
 }
 
-// Implement the GetBacon RPC
-func (s *BaconServer) GetBacon(ctx context.Context, req *pb.BaconRequest) (*pb.BaconResponse, error) {
-	url := "https://baconipsum.com/api/?type=meat-and-filler&paras=99&format=text"
-	if req.Paras > 0 {
-		url = fmt.Sprintf("https://baconipsum.com/api/?type=%s&paras=%d&format=text", req.Type, req.Paras)
-	}
+// // Implement the GetBacon RPC
+// func (s *BaconServer) GetBacon(ctx context.Context, req *pb.BaconRequest) (*pb.BaconResponse, error) {
+// 	url := "https://baconipsum.com/api/?type=meat-and-filler&paras=99&format=text"
+// 	if req.Paras > 0 {
+// 		url = fmt.Sprintf("https://baconipsum.com/api/?type=%s&paras=%d&format=text", req.Type, req.Paras)
+// 	}
 
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch bacon ipsum: %v", err)
-	}
-	defer resp.Body.Close()
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to fetch bacon ipsum: %v", err)
+// 	}
+// 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response: %v", err)
-	}
+// 	body, err := ioutil.ReadAll(resp.Body)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to read response: %v", err)
+// 	}
 
-	return &pb.BaconResponse{Text: string(body)}, nil
-}
+// 	return &pb.BaconResponse{Text: string(body)}, nil
+// }
 
-// Clean and count meats in the meat string
-func CleanMeats(input string) []string {
-	reg := regexp.MustCompile(`[^\w\s]`)
-	cleaned := reg.ReplaceAllString(input, "")
+// // Clean and count meats in the meat string
+// func CleanMeats(input string) []string {
+// 	reg := regexp.MustCompile(`[^\w\s]`)
+// 	cleaned := reg.ReplaceAllString(input, "")
 
-	meats := strings.Fields(cleaned)
-	return meats
-}
+// 	meats := strings.Fields(cleaned)
+// 	return meats
+// }
 
-// Implement GetBeefSummary RPC
-func (s *BaconServer) GetBeefSummary(ctx context.Context, req *pb.Empty) (*pb.BeefSummaryResponse, error) {
-	meatData := "Fatback t-bone t-bone, pastrami .. t-bone. pork, meatloaf jowl enim. Bresaola t-bone."
-	meats := CleanMeats(meatData)
+// // Implement GetBeefSummary RPC
+// func (s *BaconServer) GetBeefSummary(ctx context.Context, req *pb.Empty) (*pb.BeefSummaryResponse, error) {
+// 	meatData := "Fatback t-bone t-bone, pastrami .. t-bone. pork, meatloaf jowl enim. Bresaola t-bone."
+// 	meats := CleanMeats(meatData)
 
-	meatCount := make(map[string]int32)
-	for _, meat := range meats {
-		meatCount[meat]++
-	}
+// 	meatCount := make(map[string]int32)
+// 	for _, meat := range meats {
+// 		meatCount[meat]++
+// 	}
 
-	return &pb.BeefSummaryResponse{Beef: meatCount}, nil
-}
+// 	return &pb.BeefSummaryResponse{Beef: meatCount}, nil
+// }
 
 // HTTP handler for the /beef/summary endpoint
 func BeefSummaryHandler(w http.ResponseWriter, r *http.Request) {
