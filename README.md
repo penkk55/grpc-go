@@ -15,7 +15,7 @@ make run-server
 ```
 
 on another terminal
-# run server
+# run client
 
 ```
 make run-client
