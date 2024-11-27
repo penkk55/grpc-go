@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package bacon;
+
+option go_package = "/generated;bacon";
+
+service BaconService {
+  rpc GetBacon (BaconRequest) returns (BaconResponse);
+}
+
+message BaconRequest {
+  string type = 1;
+  int32 paras = 2;
+}
+
+message BaconResponse {
+  string text = 1;
+}
